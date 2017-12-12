@@ -13,6 +13,7 @@ const size = 16;
 const deckHtml = $('.deck');
 const starHtml = $('.stars');
 const moveHtml = $('.moves');
+const cardClass = "card ";
 let remainingMatches = size/2;
 let moveCount = 0;
 let flippedCard1 = null;
@@ -45,12 +46,11 @@ card.prototype.changeStatus = function() {
 		this.status = "";
 	}
 
-	this.htmlString = "<li class=\"card "+this.status+"\"><i class=\"fa "+this.cardSymbol+"\"></i></li>";
-	this.cardHtml = $(this.htmlString);
-	deckHtml.children(".card").eq(this.index).replaceWith(this.cardHtml);
+	deckHtml.children(".card").eq(this.index).attr('class',cardClass + this.status);
 };
 
 card.prototype.onClick = function() {
+	// console.log(this);
 	if(!this.flipped){
 		incrementMoves();
 		this.flipped = true;
@@ -96,8 +96,9 @@ function appendDeck() {
 	// deck = shuffle(deck);
 	for(const [index, card] of deck.entries()){
 		deckHtml.append(card.cardHtml);
-		card.cardHtml.on('click',function(){
+		card.cardHtml.click(function(){
 			card.onClick();
+			// console.log("hello");
 		});
 		card.index = index;
 	}
