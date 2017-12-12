@@ -9,6 +9,26 @@
  *   - loop through each card and create its HTML
  *   - add each card's HTML to the page
  */
+const size = 16;
+let remainingMatches = size/2;
+let moveCount = 0;
+let flippedCard1 = null;
+let deck = new Array(size);
+let card = function(cardSymbol){
+	this.cardSymbol = cardSymbol;
+	this.flipped = false;
+	this.matched = false;
+	this.status = "";
+	this.cardHtml = $("<li class=\"card \""+status+"><i class=\"fa \""+cardSymbol+"></i></li>");
+}
+let starList = new Array(3);
+let star = function(){
+	this.status = false;
+	this.starHtml = $("<li><i class=\"fa "+status+"\"></i></li>");
+}
+
+
+
 
 // Shuffle function from http://stackoverflow.com/a/2450976
 function shuffle(array) {
