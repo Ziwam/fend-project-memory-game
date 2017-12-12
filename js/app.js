@@ -13,22 +13,45 @@ const size = 16;
 let remainingMatches = size/2;
 let moveCount = 0;
 let flippedCard1 = null;
-let deck = new Array(size);
+const cardSymbolList= ["fa-diamond","fa-paper-plane-o","fa-anchor","fa-bolt","fa-cube","fa-leaf","fa-bicycle","fa-bomb"];
+let deck = [];
 let card = function(cardSymbol){
 	this.cardSymbol = cardSymbol;
 	this.flipped = false;
 	this.matched = false;
 	this.status = "";
-	this.cardHtml = $("<li class=\"card \""+status+"><i class=\"fa \""+cardSymbol+"></i></li>");
+	this.htmlString = "<li class=\"card \""+this.status+"><i class=\"fa "+this.cardSymbol+"\"></i></li>";
+	this.cardHtml = $(this.htmlString);
 }
 let starList = new Array(3);
 let star = function(){
-	this.status = false;
+	this.filled = true;
+	this.status = "";
 	this.starHtml = $("<li><i class=\"fa "+status+"\"></i></li>");
 }
 
+card.prototype.onClick = function() {
+	console.log("clicked");
+};
 
+function createDeck(){
+	for (let i = 0; i < (size/2); i++ ){
+		deck.push(new card(cardSymbolList[i]));
+		deck.push(new card(cardSymbolList[i]));
+	}
+	// console.log(deck);
+}
 
+function appendDeck(){
+	let htmlList = $('.deck');
+	for(let card of deck){
+		card.cardHtml.on('clicked',card.onClick());
+		console.log(card.htmlString);
+		htmlList.append(card.htmlString);
+	}
+}
+
+// function
 
 // Shuffle function from http://stackoverflow.com/a/2450976
 function shuffle(array) {

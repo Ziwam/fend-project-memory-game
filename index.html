@@ -30,7 +30,7 @@
         </section>
 
         <ul class="deck">
-            <li class="card">
+<!--             <li class="card">
                 <i class="fa fa-diamond"></i>
             </li>
             <li class="card">
@@ -77,10 +77,18 @@
             </li>
             <li class="card">
                 <i class="fa fa-cube"></i>
-            </li>
+            </li> -->
         </ul>
     </div>
 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="js/app.js"></script>
+    <script>
+	  	document.addEventListener("DOMContentLoaded", function() {
+	  		console.log("DOM fully loaded and parsed");
+	  		createDeck();
+	  		appendDeck();
+	  	});
+	</script>
 </body>
 </html>
