@@ -34,22 +34,48 @@ let star = function(){
 	this.starHtml = $("<li><i class=\"fa "+status+"\"></i></li>");
 }
 
-card.prototype.changeStatus = function(stat) {
-	// console.log("helo");
-	this.status = stat;
+card.prototype.changeStatus = function() {
+	if(this.flipped){
+		this.status = "open show";
+		if(this.matched){
+			this.status = "match";
+		}
+	}else{
+		this.status = "";
+	}
+
 	this.htmlString = "<li class=\"card "+this.status+"\"><i class=\"fa "+this.cardSymbol+"\"></i></li>";
 	this.cardHtml = $(this.htmlString);
-	deckHtml.children(".card").eq(this.index).html(this.cardHtml);
-	// console.log(this.cardHtml);
+	deckHtml.children(".card").eq(this.index).replaceWith(this.cardHtml);
 };
 
 card.prototype.onClick = function() {
 	if(!this.flipped){
-		flipped = true;
-		this.changeStatus("open show");
-		console.log(this.index);
+		this.flipped = true;
+		this.changeStatus();
+		compareCards(this);
 	}
 };
+
+function compareCards(newCard){
+	if(!flippedCard1){
+		flippedCard1 = newCard;
+		return;
+	}
+
+	if(flippedCard1.cardSymbol == newCard.cardSymbol){
+		flippedCard1.matched = true;
+		newCard.matched = true;
+		console.log("match!");
+	}else{
+		flippedCard1.flipped = false;
+		newCard.flipped = false;
+		console.log("no match!");
+	}
+	flippedCard1.changeStatus();
+	newCard.changeStatus();
+	flippedCard1 = null;
+}
 
 function createDeck(){
 	for (let i = 0; i < (size/2); i++ ){
@@ -60,7 +86,7 @@ function createDeck(){
 }
 
 function appendDeck(){
-	deck = shuffle(deck);
+	// deck = shuffle(deck);
 	for(const [index, card] of deck.entries()){
 		deckHtml.append(card.cardHtml);
 		card.cardHtml.on('click',function(){
