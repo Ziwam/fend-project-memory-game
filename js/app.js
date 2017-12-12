@@ -12,6 +12,7 @@
 const size = 16;
 const deckHtml = $('.deck');
 const starHtml = $('.stars');
+const moveHtml = $('.moves');
 let remainingMatches = size/2;
 let moveCount = 0;
 let flippedCard1 = null;
@@ -19,7 +20,7 @@ const cardSymbolList= ["fa-diamond","fa-paper-plane-o","fa-anchor","fa-bolt","fa
 let deck = [];
 let starList = new Array(3);
 
-let card = function(cardSymbol){
+let card = function(cardSymbol) {
 	this.index = null;
 	this.cardSymbol = cardSymbol;
 	this.flipped = false;
@@ -28,7 +29,7 @@ let card = function(cardSymbol){
 	this.htmlString = "<li class=\"card "+this.status+"\"><i class=\"fa "+this.cardSymbol+"\"></i></li>";
 	this.cardHtml = $(this.htmlString);
 }
-let star = function(){
+let star = function() {
 	this.filled = true;
 	this.status = "";
 	this.starHtml = $("<li><i class=\"fa "+status+"\"></i></li>");
@@ -51,13 +52,19 @@ card.prototype.changeStatus = function() {
 
 card.prototype.onClick = function() {
 	if(!this.flipped){
+		incrementMoves();
 		this.flipped = true;
 		this.changeStatus();
 		compareCards(this);
 	}
 };
 
-function compareCards(newCard){
+function incrementMoves() {
+	moveCount++;
+	moveHtml.text(moveCount+"");
+}
+
+function compareCards(newCard) {
 	if(!flippedCard1){
 		flippedCard1 = newCard;
 		return;
@@ -77,7 +84,7 @@ function compareCards(newCard){
 	flippedCard1 = null;
 }
 
-function createDeck(){
+function createDeck() {
 	for (let i = 0; i < (size/2); i++ ){
 		deck.push(new card(cardSymbolList[i]));
 		deck.push(new card(cardSymbolList[i]));
@@ -85,7 +92,7 @@ function createDeck(){
 	// console.log(deck);
 }
 
-function appendDeck(){
+function appendDeck() {
 	// deck = shuffle(deck);
 	for(const [index, card] of deck.entries()){
 		deckHtml.append(card.cardHtml);
