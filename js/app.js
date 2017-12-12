@@ -10,28 +10,45 @@
  *   - add each card's HTML to the page
  */
 const size = 16;
+const deckHtml = $('.deck');
+const starHtml = $('.stars');
 let remainingMatches = size/2;
 let moveCount = 0;
 let flippedCard1 = null;
 const cardSymbolList= ["fa-diamond","fa-paper-plane-o","fa-anchor","fa-bolt","fa-cube","fa-leaf","fa-bicycle","fa-bomb"];
 let deck = [];
+let starList = new Array(3);
+
 let card = function(cardSymbol){
+	this.index = null;
 	this.cardSymbol = cardSymbol;
 	this.flipped = false;
 	this.matched = false;
 	this.status = "";
-	this.htmlString = "<li class=\"card \""+this.status+"><i class=\"fa "+this.cardSymbol+"\"></i></li>";
+	this.htmlString = "<li class=\"card "+this.status+"\"><i class=\"fa "+this.cardSymbol+"\"></i></li>";
 	this.cardHtml = $(this.htmlString);
 }
-let starList = new Array(3);
 let star = function(){
 	this.filled = true;
 	this.status = "";
 	this.starHtml = $("<li><i class=\"fa "+status+"\"></i></li>");
 }
 
+card.prototype.changeStatus = function(stat) {
+	// console.log("helo");
+	this.status = stat;
+	this.htmlString = "<li class=\"card "+this.status+"\"><i class=\"fa "+this.cardSymbol+"\"></i></li>";
+	this.cardHtml = $(this.htmlString);
+	deckHtml.children(".card").eq(this.index).html(this.cardHtml);
+	// console.log(this.cardHtml);
+};
+
 card.prototype.onClick = function() {
-	console.log("clicked");
+	if(!this.flipped){
+		flipped = true;
+		this.changeStatus("open show");
+		console.log(this.index);
+	}
 };
 
 function createDeck(){
@@ -43,11 +60,13 @@ function createDeck(){
 }
 
 function appendDeck(){
-	let htmlList = $('.deck');
-	for(let card of deck){
-		card.cardHtml.on('clicked',card.onClick());
-		console.log(card.htmlString);
-		htmlList.append(card.htmlString);
+	deck = shuffle(deck);
+	for(const [index, card] of deck.entries()){
+		deckHtml.append(card.cardHtml);
+		card.cardHtml.on('click',function(){
+			card.onClick();
+		});
+		card.index = index;
 	}
 }
 
@@ -63,6 +82,7 @@ function shuffle(array) {
         temporaryValue = array[currentIndex];
         array[currentIndex] = array[randomIndex];
         array[randomIndex] = temporaryValue;
+
     }
 
     return array;
