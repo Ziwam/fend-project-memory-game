@@ -153,7 +153,7 @@ function createStars() {
 }
 
 function appendDeck() {
-	// deck = shuffle(deck);
+	deck = shuffle(deck);
 	for(const [index, card] of deck.entries()){
 		deckHtml.append(card.cardHtml);
 		card.cardHtml.click(function(){
