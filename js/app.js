@@ -9,9 +9,10 @@
  *   - loop through each card and create its HTML
  *   - add each card's HTML to the page
  */
-const size = 16;
+const deckCount = 16;
+const starCount = 3;
 const deckHtml = $('.deck');
-const starHtml = $('.stars');
+const starListHtml = $('.stars');
 const moveHtml = $('.moves');
 const timerHtml = $('.timer');
 const cardClass = "card ";
@@ -19,13 +20,12 @@ const starClass = "fa ";
 const cardSymbolList = ["fa-diamond","fa-paper-plane-o","fa-anchor","fa-bolt","fa-cube","fa-leaf","fa-bicycle","fa-bomb"];
 const starSymbolList = ["fa-star","fa-star-half-o","fa-star-o"];
 let time = 0;
-let remainingMatches = size/2;
+let possibleMatches = deckCount/2;
+let mistakes = 0;
 let moveCount = 0;
-let flippedCard1 = null;
+let flippedCard = null;
 let deck = [];
 let starList = [];
-
-
 
 let card = function(cardSymbol) {
 	this.index = null;
@@ -36,9 +36,8 @@ let card = function(cardSymbol) {
 	this.cardHtml = $("<li class=\"card "+this.status+"\"><i class=\"fa "+this.cardSymbol+"\"></i></li>");
 }
 let star = function() {
-	this.filled = true;
-	this.status = "";
-	this.starHtml = $("<li><i class=\"fa "+status+"\"></i></li>");
+	this.status = starSymbolList[0];
+	this.starHtml = $("<li><i class=\"fa "+this.status+"\"></i></li>");
 }
 
 card.prototype.changeStatus = function() {
@@ -55,7 +54,6 @@ card.prototype.changeStatus = function() {
 };
 
 card.prototype.onClick = function() {
-	// console.log(this);
 	if(!this.flipped){
 		incrementMoves();
 		this.flipped = true;
@@ -63,6 +61,11 @@ card.prototype.onClick = function() {
 		compareCards(this);
 	}
 };
+
+function changeStarStatus(index,number) {
+		console.log(starListHtml.children(".fa"));
+		starListHtml.children("li").eq(index).find('i').attr('class',starClass + starSymbolList[number]);
+}
 
 function incrementMoves() {
 	moveCount++;
@@ -82,29 +85,63 @@ function timeformat(numString) {
 
 
 function compareCards(newCard) {
-	if(!flippedCard1){
-		flippedCard1 = newCard;
+	if(!flippedCard){
+		flippedCard = newCard;
 		return;
 	}
 
-	if(flippedCard1.cardSymbol == newCard.cardSymbol){
-		flippedCard1.matched = true;
+	if(flippedCard.cardSymbol == newCard.cardSymbol){
+		flippedCard.matched = true;
 		newCard.matched = true;
-		console.log("match!");
+		// console.log("match!"); 
 	}else{
-		flippedCard1.flipped = false;
+		flippedCard.flipped = false;
 		newCard.flipped = false;
-		console.log("no match!");
+		// console.log("no match!");
+		mistakes++;
+		console.log(mistakes);
+		updateRating();
 	}
-	flippedCard1.changeStatus();
+	flippedCard.changeStatus();
 	newCard.changeStatus();
-	flippedCard1 = null;
+	flippedCard = null;
+}
+
+function updateRating() {
+	switch(mistakes){
+		case 2:
+			changeStarStatus(2,1);
+			break;
+		case 4:
+			changeStarStatus(2,2);
+			break;
+		case 8:
+			changeStarStatus(1,1);
+			break;
+		case 12:
+			changeStarStatus(1,2);
+			break;
+		case 16:
+			changeStarStatus(0,1);
+			break;
+		case 20:
+			changeStarStatus(0,2);
+			break;
+
+	}
 }
 
 function createDeck() {
-	for (let i = 0; i < (size/2); i++ ){
+	for (let i = 0; i < possibleMatches; i++ ){
 		deck.push(new card(cardSymbolList[i]));
 		deck.push(new card(cardSymbolList[i]));
+	}
+	// console.log(deck);
+}
+
+function createStars() {
+	for (let i = 0; i < starCount; i++){
+		starList.push(new star());
 	}
 	// console.log(deck);
 }
@@ -118,6 +155,13 @@ function appendDeck() {
 			// console.log("hello");
 		});
 		card.index = index;
+	}
+}
+
+function appendStars() {
+	// deck = shuffle(deck);
+	for(const star of starList){
+		starListHtml.append(star.starHtml);
 	}
 }
 
@@ -141,7 +185,9 @@ function shuffle(array) {
 
 function gameStart() {
 	createDeck();
+	createStars();
 	appendDeck();
+	appendStars();
 	setInterval(updateTimer,1000);
 }
 
