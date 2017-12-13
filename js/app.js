@@ -13,13 +13,19 @@ const size = 16;
 const deckHtml = $('.deck');
 const starHtml = $('.stars');
 const moveHtml = $('.moves');
+const timerHtml = $('.timer');
 const cardClass = "card ";
+const starClass = "fa ";
+const cardSymbolList = ["fa-diamond","fa-paper-plane-o","fa-anchor","fa-bolt","fa-cube","fa-leaf","fa-bicycle","fa-bomb"];
+const starSymbolList = ["fa-star","fa-star-half-o","fa-star-o"];
+let time = 0;
 let remainingMatches = size/2;
 let moveCount = 0;
 let flippedCard1 = null;
-const cardSymbolList= ["fa-diamond","fa-paper-plane-o","fa-anchor","fa-bolt","fa-cube","fa-leaf","fa-bicycle","fa-bomb"];
 let deck = [];
-let starList = new Array(3);
+let starList = [];
+
+
 
 let card = function(cardSymbol) {
 	this.index = null;
@@ -27,8 +33,7 @@ let card = function(cardSymbol) {
 	this.flipped = false;
 	this.matched = false;
 	this.status = "";
-	this.htmlString = "<li class=\"card "+this.status+"\"><i class=\"fa "+this.cardSymbol+"\"></i></li>";
-	this.cardHtml = $(this.htmlString);
+	this.cardHtml = $("<li class=\"card "+this.status+"\"><i class=\"fa "+this.cardSymbol+"\"></i></li>");
 }
 let star = function() {
 	this.filled = true;
@@ -63,6 +68,18 @@ function incrementMoves() {
 	moveCount++;
 	moveHtml.text(moveCount+"");
 }
+
+function updateTimer() {
+	time++;
+	let minutes = Math.floor(time/60);
+	let seconds = time%60;
+	timerHtml.text(timeformat(minutes)+":"+timeformat(seconds));
+}
+
+function timeformat(numString) {
+	return numString.toString().length == 1 ? "0"+numString : numString;
+}
+
 
 function compareCards(newCard) {
 	if(!flippedCard1){
@@ -120,6 +137,12 @@ function shuffle(array) {
     }
 
     return array;
+}
+
+function gameStart() {
+	createDeck();
+	appendDeck();
+	setInterval(updateTimer,1000);
 }
 
 

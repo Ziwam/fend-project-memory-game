@@ -13,6 +13,7 @@
     <div class="container">
         <header>
             <h1>Matching Game</h1>
+            <h2 class="timer">00:00<h2>
         </header>
 
         <section class="score-panel">
@@ -22,7 +23,7 @@
         		<li><i class="fa fa-star"></i></li>
         	</ul>
 
-        	<span class="moves">3</span> Moves
+        	<span class="moves">0</span> Moves
 
             <div class="restart">
         		<i class="fa fa-repeat"></i>
@@ -38,8 +39,7 @@
     <script>
 	  	document.addEventListener("DOMContentLoaded", function() {
 	  		console.log("DOM fully loaded and parsed");
-	  		createDeck();
-	  		appendDeck();
+	  		gameStart();
 	  	});
 	</script>
 </body>
