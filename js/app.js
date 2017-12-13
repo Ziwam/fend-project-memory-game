@@ -36,6 +36,7 @@ let card = function(cardSymbol) {
 	this.cardSymbol = cardSymbol;
 	this.flipped = false;
 	this.matched = false;
+	this.wrong = false;
 	this.status = "";
 	this.cardHtml = $("<li class=\"card "+this.status+"\"><i class=\"fa "+this.cardSymbol+"\"></i></li>");
 }
@@ -49,6 +50,9 @@ card.prototype.changeStatus = function() {
 		this.status = "open show";
 		if(this.matched){
 			this.status = "match";
+		}else if(this.wrong){
+			this.status = "wrong";
+			setTimeout(flipBack,900,this);
 		}
 	}else{
 		this.status = "";
@@ -65,6 +69,13 @@ card.prototype.onClick = function() {
 		compareCards(this);
 	}
 };
+
+flipBack = function(card) {
+	console.log('hello');
+	card.wrong = false;
+	card.flipped = false;
+	card.changeStatus();
+}
 
 function changeStarStatus(index,number) {
 	starListHtml.children("li").eq(index).find('i').attr('class',starClass + starSymbolList[number]);
@@ -100,11 +111,11 @@ function compareCards(newCard) {
 		possibleMatches--;
 		gameEnd();
 	}else{
-		flippedCard.flipped = false;
-		newCard.flipped = false;
+		flippedCard.wrong = true;
+		newCard.wrong = true;
 		// console.log("no match!");
 		mistakes++;
-		console.log(mistakes);
+		// console.log(mistakes);
 		updateRating();
 	}
 	flippedCard.changeStatus();
