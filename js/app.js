@@ -20,6 +20,7 @@ const starClass = "fa ";
 const cardSymbolList = ["fa-diamond","fa-paper-plane-o","fa-anchor","fa-bolt","fa-cube","fa-leaf","fa-bicycle","fa-bomb"];
 const starSymbolList = ["fa-star","fa-star-half-o","fa-star-o"];
 let time = 0;
+let interval_id = null;
 let possibleMatches = deckCount/2;
 let mistakes = 0;
 let moveCount = 0;
@@ -63,7 +64,6 @@ card.prototype.onClick = function() {
 };
 
 function changeStarStatus(index,number) {
-		console.log(starListHtml.children(".fa"));
 		starListHtml.children("li").eq(index).find('i').attr('class',starClass + starSymbolList[number]);
 }
 
@@ -93,7 +93,8 @@ function compareCards(newCard) {
 	if(flippedCard.cardSymbol == newCard.cardSymbol){
 		flippedCard.matched = true;
 		newCard.matched = true;
-		// console.log("match!"); 
+		// console.log("match!");
+		possibleMatches--;
 	}else{
 		flippedCard.flipped = false;
 		newCard.flipped = false;
@@ -127,7 +128,8 @@ function updateRating() {
 		case 20:
 			changeStarStatus(0,2);
 			break;
-
+		default:
+			break;
 	}
 }
 
@@ -159,7 +161,6 @@ function appendDeck() {
 }
 
 function appendStars() {
-	// deck = shuffle(deck);
 	for(const star of starList){
 		starListHtml.append(star.starHtml);
 	}
@@ -184,11 +185,36 @@ function shuffle(array) {
 }
 
 function gameStart() {
+	timerHtml.text("00:00");
+	moveHtml.text("0");
 	createDeck();
 	createStars();
 	appendDeck();
 	appendStars();
-	setInterval(updateTimer,1000);
+	interval_id = setInterval(updateTimer,1000);
+}
+
+function gameReset() {
+	deckHtml.empty();
+	starListHtml.empty();
+	time = 0;
+	possibleMatches = deckCount/2;
+	mistakes = 0;
+	moveCount = 0;
+	flippedCard = null;
+	deck = [];
+	starList = [];
+	clearInterval(interval_id);
+
+	gameStart();
+}
+
+function gameEnd() {
+	if(possibleMatches != 0) {
+		return;
+	}
+
+	
 }
 
 
