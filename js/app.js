@@ -1,14 +1,4 @@
-/*
- * Create a list that holds all of your cards
- */
-
-
-/*
- * Display the cards on the page
- *   - shuffle the list of cards using the provided "shuffle" method below
- *   - loop through each card and create its HTML
- *   - add each card's HTML to the page
- */
+// Constant variables
 const deckCount = 16;
 const starCount = 3;
 const deckHtml = $('.deck');
@@ -22,15 +12,18 @@ const cardClass = "card ";
 const starClass = "fa ";
 const cardSymbolList = ["fa-diamond","fa-paper-plane-o","fa-anchor","fa-bolt","fa-cube","fa-leaf","fa-bicycle","fa-bomb"];
 const starSymbolList = ["fa-star","fa-star-half-o","fa-star-o"];
+
+//Changeable variables
 let time = 0;
-let interval_id = null;
-let possibleMatches = deckCount/2;
+let interval_id = null; //Id for timer's set interval
+let possibleMatches = deckCount/2; //number of matches left in game
 let mistakes = 0;
 let moveCount = 0;
-let flippedCard = null;
-let deck = [];
+let flippedCard = null; //Holds card object of the first flipped card for comparison
+let deck = []; 
 let starList = [];
 
+//Card object constructor
 let card = function(cardSymbol) {
 	this.index = null;
 	this.cardSymbol = cardSymbol;
@@ -40,21 +33,25 @@ let card = function(cardSymbol) {
 	this.status = "";
 	this.cardHtml = $("<li class=\"card "+this.status+"\"><i class=\"fa "+this.cardSymbol+"\"></i></li>");
 }
+//Star object constructor
 let star = function() {
 	this.status = starSymbolList[0];
 	this.starHtml = $("<li><i class=\"fa "+this.status+"\"></i></li>");
 }
 
+//Change card object html 
 card.prototype.changeStatus = function() {
-	if(this.flipped){
+	if(this.flipped) {
 		this.status = "open show";
 		if(this.matched){
 			this.status = "match";
 		}else if(this.wrong){
 			this.status = "wrong";
+
+			//Wait 0.9s before flipping card back over
 			setTimeout(flipBack,900,this);
 		}
-	}else{
+	}else {
 		this.status = "";
 	}
 
@@ -62,7 +59,7 @@ card.prototype.changeStatus = function() {
 };
 
 card.prototype.onClick = function() {
-	if(!this.flipped){
+	if(!this.flipped) {
 		incrementMoves();
 		this.flipped = true;
 		this.changeStatus();
@@ -70,22 +67,27 @@ card.prototype.onClick = function() {
 	}
 };
 
+//Flips card to blank side
 flipBack = function(card) {
-	console.log('hello');
 	card.wrong = false;
 	card.flipped = false;
 	card.changeStatus();
 }
 
+//Change Star object's html
 function changeStarStatus(index,number) {
 	starListHtml.children("li").eq(index).find('i').attr('class',starClass + starSymbolList[number]);
 }
 
+//Increases move count by 1 and changes html
 function incrementMoves() {
 	moveCount++;
 	moveHtml.text(moveCount+" Moves");
 }
-
+/*
+ * Creates "00:00" time based on incremented variable time.
+ * Run every seccond.
+ */
 function updateTimer() {
 	time++;
 	let minutes = Math.floor(time/60);
@@ -93,29 +95,30 @@ function updateTimer() {
 	timerHtml.text(timeformat(minutes)+":"+timeformat(seconds));
 }
 
+// Returns string with "0" in front if char count <2 
 function timeformat(numString) {
 	return numString.toString().length == 1 ? "0"+numString : numString;
 }
 
-
+// Compares cards
 function compareCards(newCard) {
-	if(!flippedCard){
+	// If no card to compare to save newCard as flippedCard
+	if(!flippedCard) {
 		flippedCard = newCard;
 		return;
 	}
 
-	if(flippedCard.cardSymbol == newCard.cardSymbol){
+	// Cards match
+	if(flippedCard.cardSymbol == newCard.cardSymbol) {
 		flippedCard.matched = true;
 		newCard.matched = true;
-		// console.log("match!");
 		possibleMatches--;
 		gameEnd();
-	}else{
+	// Cards don't match
+	}else {
 		flippedCard.wrong = true;
 		newCard.wrong = true;
-		// console.log("no match!");
 		mistakes++;
-		// console.log(mistakes);
 		updateRating();
 	}
 	flippedCard.changeStatus();
@@ -123,6 +126,7 @@ function compareCards(newCard) {
 	flippedCard = null;
 }
 
+// Changes stars status based on mistakes
 function updateRating() {
 	switch(mistakes){
 		case 2:
@@ -148,46 +152,46 @@ function updateRating() {
 	}
 }
 
+// Creates Card objects and pushes to deck list
 function createDeck() {
-	for (let i = 0; i < possibleMatches; i++ ){
+	for (let i = 0; i < possibleMatches; i++ ) {
 		deck.push(new card(cardSymbolList[i]));
 		deck.push(new card(cardSymbolList[i]));
 	}
-	// console.log(deck);
 }
 
+// Creates Star objects and pushes to star list
 function createStars() {
-	for (let i = 0; i < starCount; i++){
+	for (let i = 0; i < starCount; i++) {
 		starList.push(new star());
 	}
-	// console.log(deck);
 }
 
+// Appends card's html to deck html
 function appendDeck() {
 	deck = shuffle(deck);
-	for(const [index, card] of deck.entries()){
+	for(const [index, card] of deck.entries()) {
 		deckHtml.append(card.cardHtml);
 		card.cardHtml.click(function(){
 			card.onClick();
-			// console.log("hello");
 		});
 		card.index = index;
 	}
 }
 
+// Appends star html to stars html
 function appendStars() {
-	for(const star of starList){
+	for(const star of starList) {
 		starListHtml.append(star.starHtml);
 	}
 }
 
+// Appends star html to star_stats html
 function appendStarStats() {
-	for(const star of starList){
+	for(const star of starList) {
 		starStats.append(star.starHtml);
 	}
 }
-
-// function
 
 // Shuffle function from http://stackoverflow.com/a/2450976
 function shuffle(array) {
@@ -205,9 +209,13 @@ function shuffle(array) {
     return array;
 }
 
+// Starts game
 function gameStart() {
+	// Makes game board visible
 	gamePlaying.css('display','');
+	// Makes game over visible
 	gameOver.css('display','none');
+
 	timerHtml.text("00:00");
 	moveHtml.text("0 Moves");
 	starStats.empty();
@@ -215,12 +223,16 @@ function gameStart() {
 	createStars();
 	appendDeck();
 	appendStars();
+	// Begins timer interval
 	interval_id = setInterval(updateTimer,1000);
 }
 
+// Resets game
 function gameReset() {
+	// Clears list html
 	deckHtml.empty();
 	starListHtml.empty();
+	// Resets variables 
 	time = 0;
 	possibleMatches = deckCount/2;
 	mistakes = 0;
@@ -228,11 +240,14 @@ function gameReset() {
 	flippedCard = null;
 	deck = [];
 	starList = [];
+	// Stops timer interval from id
 	clearInterval(interval_id);
 
+	// Begin game again
 	gameStart();
 }
 
+// Displays GameOver Screen
 function gameEnd() {
 	if(possibleMatches != 0) {
 		return;
@@ -243,15 +258,3 @@ function gameEnd() {
 	gamePlaying.css('display','none');
 	gameOver.css('display','');
 }
-
-
-/*
- * set up the event listener for a card. If a card is clicked:
- *  - display the card's symbol (put this functionality in another function that you call from this one)
- *  - add the card to a *list* of "open" cards (put this functionality in another function that you call from this one)
- *  - if the list already has another card, check to see if the two cards match
- *    + if the cards do match, lock the cards in the open position (put this functionality in another function that you call from this one)
- *    + if the cards do not match, remove the cards from the list and hide the card's symbol (put this functionality in another function that you call from this one)
- *    + increment the move counter and display it on the page (put this functionality in another function that you call from this one)
- *    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
- */
