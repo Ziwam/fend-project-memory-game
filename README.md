@@ -2,8 +2,21 @@
 
 ## Table of Contents
 
+* [Rules](#rules)
 * [Instructions](#instructions)
 * [Contributing](#contributing)
+
+## Rules
+
+This is a classic matching game.
+
+The goal of the game is to match each card to another card that matches the other's sysmbol.
+
+Once you've matched all the cards, you win!
+
+Star ratings are based scrictly on the number of wrong matches.
+
+Try to beat your time or your rating.
 
 ## Instructions
 
