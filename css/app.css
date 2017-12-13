@@ -28,6 +28,13 @@ body {
     flex-direction: column;
 }
 
+header .timer {
+    text-align: center;
+    font-weight: 100;
+    font-size: 35px;
+    margin: -15px 0 -30px;
+}
+
 h1 {
     font-family: 'Open Sans', sans-serif;
     font-weight: 300;
@@ -106,4 +113,53 @@ h1 {
 .score-panel .restart {
     float: right;
     cursor: pointer;
+}
+
+/*
+Styles for Popup
+*/
+
+.popup {
+    height: 300px;
+    width: 425px;
+    font-size: 20px;
+    color: #333;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.popup > * {
+    margin: 2px;
+}
+
+.popup .star_stats {
+    padding: 0;
+    list-style: none;
+}
+
+.popup p {
+    font-size: 17px;
+    margin: 0px;
+}
+
+.popup .star_stats li {
+    display: inline-block;
+    font-size: 35px;
+}
+
+.popup .button {
+    height: 35px;
+    width: 125px;
+    margin: 12px;
+    background: #55bb8f;
+    color: #ffffff;
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 5px 2px 20px 0 rgba(46, 61, 73, 0.37);
 }

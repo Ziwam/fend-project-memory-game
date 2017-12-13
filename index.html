@@ -13,22 +13,33 @@
     <div class="container">
         <header>
             <h1>Matching Game</h1>
-            <h2 class="timer"><h2>
+            <h2 class="game_play timer"><h2>
         </header>
 
-        <section class="score-panel">
+        <section class="game_play score-panel">
         	<ul class="stars">
         	</ul>
 
-        	<span class="moves"></span> Moves
+        	<span class="moves"></span>
 
             <div class="restart">
         		<i class="fa fa-repeat"></i>
         	</div>
         </section>
 
-        <ul class="deck">
+        <ul class="game_play deck">
         </ul>
+
+        <div class="game_end popup">
+        	<ul class="star_stats">
+        	</ul>
+			<h2>You Win!</h2>
+			<p class="timer">00:18</p>
+			<p class="moves">18</p>
+			<div class="restart button">
+				<p>Play Again</p>
+			</div>
+        </div>
     </div>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
@@ -38,9 +49,9 @@
 	  		console.log("DOM fully loaded and parsed");
 	  		gameStart();
 	  	});
-	  	$('.fa-repeat').click(function(){
+	  	$('.restart').click(function(){
 	  	gameReset();
-	});
+		});
 	</script>
 </body>
 </html>

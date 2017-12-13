@@ -15,6 +15,9 @@ const deckHtml = $('.deck');
 const starListHtml = $('.stars');
 const moveHtml = $('.moves');
 const timerHtml = $('.timer');
+const starStats = $('.star_stats');
+const gamePlaying = $('.game_play');
+const gameOver = $('.game_end');
 const cardClass = "card ";
 const starClass = "fa ";
 const cardSymbolList = ["fa-diamond","fa-paper-plane-o","fa-anchor","fa-bolt","fa-cube","fa-leaf","fa-bicycle","fa-bomb"];
@@ -64,12 +67,12 @@ card.prototype.onClick = function() {
 };
 
 function changeStarStatus(index,number) {
-		starListHtml.children("li").eq(index).find('i').attr('class',starClass + starSymbolList[number]);
+	starListHtml.children("li").eq(index).find('i').attr('class',starClass + starSymbolList[number]);
 }
 
 function incrementMoves() {
 	moveCount++;
-	moveHtml.text(moveCount+"");
+	moveHtml.text(moveCount+" Moves");
 }
 
 function updateTimer() {
@@ -95,6 +98,7 @@ function compareCards(newCard) {
 		newCard.matched = true;
 		// console.log("match!");
 		possibleMatches--;
+		gameEnd();
 	}else{
 		flippedCard.flipped = false;
 		newCard.flipped = false;
@@ -166,6 +170,12 @@ function appendStars() {
 	}
 }
 
+function appendStarStats() {
+	for(const star of starList){
+		starStats.append(star.starHtml);
+	}
+}
+
 // function
 
 // Shuffle function from http://stackoverflow.com/a/2450976
@@ -185,8 +195,11 @@ function shuffle(array) {
 }
 
 function gameStart() {
+	gamePlaying.css('display','');
+	gameOver.css('display','none');
 	timerHtml.text("00:00");
-	moveHtml.text("0");
+	moveHtml.text("0 Moves");
+	starStats.empty();
 	createDeck();
 	createStars();
 	appendDeck();
@@ -214,7 +227,10 @@ function gameEnd() {
 		return;
 	}
 
-	
+	appendStarStats();
+	clearInterval(interval_id);
+	gamePlaying.css('display','none');
+	gameOver.css('display','');
 }
 
 
