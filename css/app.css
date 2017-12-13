@@ -147,13 +147,13 @@ Styles for Popup
 }
 
 .popup p {
-    font-size: 17px;
+    font-size: 0.9em;
     margin: 0px;
 }
 
 .popup .star_stats li {
     display: inline-block;
-    font-size: 35px;
+    font-size: 2em
 }
 
 .popup .button {
@@ -168,4 +168,64 @@ Styles for Popup
     justify-content: center;
     align-items: center;
     box-shadow: 5px 2px 20px 0 rgba(46, 61, 73, 0.37);
+}
+
+/*Device Scaling*/
+@media screen and (min-width: 501px) and (max-width: 800px) {
+    .deck {
+        width: 80vw;
+        min-height: 80vw;
+        padding: 2em;
+    }
+    .deck .card {
+        width: 16vw;
+        height: 16vw;
+    }
+    .score-panel {
+        width: 70vw;
+    }
+    .popup {
+        width: 80vw;
+        font-size: 22px;
+    }
+    .score-panel {
+        font-size: 1.5em;
+        margin-top: 22px;
+    }
+
+
+}
+
+@media screen and (max-width: 500px) {
+    .deck {
+        width: 90vw;
+        min-height: 90vw;
+        padding: 0.8em;
+    }
+    .deck .card {
+        width: 18vw;
+        height: 18vw;
+    }
+    .score-panel {
+        width: 80vw;
+    }
+    .popup {
+        width: 90vw;
+    }
+    .score-panel {
+        font-size: 1.3em;
+        margin-top: 22px;
+    }
+
+}
+
+@media screen and (min-width: 801px) {
+    .popup {
+        width: 80vw;
+        font-size: 24px;
+    }
+    .score-panel {
+        font-size: 1.5em;
+        margin-top: 22px;
+    }
 }
