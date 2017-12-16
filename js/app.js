@@ -11,10 +11,11 @@ const gameOver = $('.game_end');
 const cardClass = "card ";
 const starClass = "fa ";
 const cardSymbolList = ["fa-diamond","fa-paper-plane-o","fa-anchor","fa-bolt","fa-cube","fa-leaf","fa-bicycle","fa-bomb"];
-const starSymbolList = ["fa-star","fa-star-half-o","fa-star-o"];
+const starSymbolList = ["fa-star","fa-star-o"];
 
 //Changeable variables
 let time = 0;
+let firstClick = false;
 let interval_id = null; //Id for timer's set interval
 let possibleMatches = deckCount/2; //number of matches left in game
 let mistakes = 0;
@@ -59,8 +60,14 @@ card.prototype.changeStatus = function() {
 };
 
 card.prototype.onClick = function() {
+	if(!firstClick) {
+	firstClick = true;
+
+	// Begins timer interval
+	interval_id = setInterval(updateTimer,1000);
+	}
+
 	if(!this.flipped) {
-		incrementMoves();
 		this.flipped = true;
 		this.changeStatus();
 		compareCards(this);
@@ -108,6 +115,8 @@ function compareCards(newCard) {
 		return;
 	}
 
+	incrementMoves();
+
 	// Cards match
 	if(flippedCard.cardSymbol == newCard.cardSymbol) {
 		flippedCard.matched = true;
@@ -129,23 +138,11 @@ function compareCards(newCard) {
 // Changes stars status based on mistakes
 function updateRating() {
 	switch(mistakes){
-		case 2:
+		case 9:
 			changeStarStatus(2,1);
 			break;
-		case 4:
-			changeStarStatus(2,2);
-			break;
-		case 8:
+		case 18:
 			changeStarStatus(1,1);
-			break;
-		case 12:
-			changeStarStatus(1,2);
-			break;
-		case 16:
-			changeStarStatus(0,1);
-			break;
-		case 20:
-			changeStarStatus(0,2);
 			break;
 		default:
 			break;
@@ -203,13 +200,12 @@ function shuffle(array) {
         temporaryValue = array[currentIndex];
         array[currentIndex] = array[randomIndex];
         array[randomIndex] = temporaryValue;
-
     }
 
     return array;
 }
 
-// Starts game
+// Starts game by creating objects and appending html
 function gameStart() {
 	// Makes game board visible
 	gamePlaying.css('display','');
@@ -223,11 +219,9 @@ function gameStart() {
 	createStars();
 	appendDeck();
 	appendStars();
-	// Begins timer interval
-	interval_id = setInterval(updateTimer,1000);
 }
 
-// Resets game
+// Resets game by setting variables to default values
 function gameReset() {
 	// Clears list html
 	deckHtml.empty();
@@ -235,6 +229,7 @@ function gameReset() {
 	// Resets variables 
 	time = 0;
 	possibleMatches = deckCount/2;
+	firstClick = false;
 	mistakes = 0;
 	moveCount = 0;
 	flippedCard = null;
@@ -247,7 +242,7 @@ function gameReset() {
 	gameStart();
 }
 
-// Displays GameOver Screen
+// Displays GameOver Screen and stops time interval
 function gameEnd() {
 	if(possibleMatches != 0) {
 		return;
